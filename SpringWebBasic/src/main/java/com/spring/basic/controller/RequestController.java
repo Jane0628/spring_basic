@@ -4,20 +4,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.spring.basic.model.UserVO;
 
 // 자동으로 스프링 컨테이너에 해당 클래스의 빈을 등록하는 아노테이션
 // 빈을 등록해 놔야 HandlerMapping이 이 클래스의 객체를 검색할 수 있을 것이다.
 // @Controller("merong")  이름을 부여하지 않으면 클래스의 이름으로 지정되고 이름을 지정해주면 해당 이름으로 지정된다.
 
 @Controller
+@RequestMapping("/request/") // 컨트롤러 자체에 공통된 URI 맵핑
 public class RequestController {
 
 	public RequestController() {
 		System.out.println("RequestCon 생성!");
 	}
 	
-	@RequestMapping("/request/test")
+	@RequestMapping("test")
 	public String testCall() {
 		System.out.println("/request/test 요청이 들어옴!");
 		return "test";
@@ -30,17 +32,70 @@ public class RequestController {
    */
 	
 //	@RequestMapping(value = "/request/basic01", method = RequestMethod.GET)
-	@GetMapping("/request/basic01")
+	@GetMapping("basic01")
 	public String req() {
 		System.out.println("/request/basic01 GET 방식 요청이 들어옴!");
 		return "request/req-ex01";
 	}
 	
 //	@RequestMapping(value = "/request/basic01", method = RequestMethod.POST)
-	@PostMapping("/request/basic01")
+	@PostMapping("basic01")
 	public String basic() {
 		System.out.println("/request/basic01 POST 방식 요청이 들어옴!");
 		return "request/req-ex01";
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+	
+	// 컨트롤러 내의 메서드 타입을 void로 선언하면 요청이 들어온 URL값을 뷰 리졸버에게 전달합니다.
+	@GetMapping("join")
+	public void register() {
+		System.out.println("/request/join: GET");
+	}
+	
+	// 요청 URI 주소가 같더라도 전송 방식에 따라 맵핑을 다르게 하기 때문에 같은 주소를 사용하는 것이 가능합니다.
+	// (GET -> 화면 처리, POST -> 입력값 처리)
+	
+	/*
+	 	# 스프링에서 요청과 함께 전달된 데이터를 처리하는 방식
+	 	
+	 	1. 전통적인 jsp/servlet 방식의 파라미터 읽기 처리 방법. (사용은 가능하지만 거의 안 씀)
+	 	- HttpServletRequest 객체를 활용 (우리가 jsp에서 사용하던 방식)
+	
+		@PostMapping("join")
+		public void register(HttpServletRequest request) {
+			System.out.println("/request/join : POST");
+			
+			System.out.println("ID : " + request.getParameter("userId"));
+			System.out.println("PW : " + request.getParameter("userPw"));
+			System.out.println("HOBBY : " + Arrays.toString(request.getParameterValues("hobby")));
+		}
+		
+		-------------------------------------------------------------------------------------------
+	
+	 	2. @RequestParam 아노테이션을 이용한 요청 파라미터 처리. (자주 사용됨.)
+	 	@RequestParam("파라미터 변수명" 값을 받아서 처리할 변수.
+	 	파라미터 변수명과 값을 받을 변수명을 동일하게 작성하면 @RequestParam 생략 가능.
+	 
+	
+		@PostMapping("join")
+		public void register(String userId,
+							 String userPw,
+							 @RequestParam(value = "hobby", required = false, defaultValue = "no hobby person") List<String> hobby) {
+			System.out.println("ID : " + userId);
+			System.out.println("PW : " + userPw);
+			System.out.println("Hobby : " + hobby);
+		}
+		
+		-------------------------------------------------------------------------------------------
+		
+	 	3. 커맨드 객체를 활용한 파라미터 처리
+	 	- 파라미터 데이터와 연동되는 VO 클래스가 필요합니다.
+	 	
+	 */
+	@PostMapping("join")
+	public void register(UserVO vo) {
+		System.out.println(vo);
 	}
 	
 }
