@@ -21,10 +21,12 @@ public class ScoreController {
 	@Autowired
 	private IScoreService service;
 	
+	/*
 	@Autowired
 	public ScoreController(IScoreService service) {
 		this.service = service;
 	}
+	*/
 	
 	// 점수 등록 화면을 열어주는 처리를 하는 메서드
 	@GetMapping("/register")
