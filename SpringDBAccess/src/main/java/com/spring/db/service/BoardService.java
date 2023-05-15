@@ -6,39 +6,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.db.model.BoardVO;
-import com.spring.db.repository.IBoardDAO;
+import com.spring.db.repository.IBoardMapper;
 
 @Service
 public class BoardService implements IBoardService {
 
+//	@Autowired
+//	@Qualifier("boardDAO")
+//	private IBoardDAO dao;
+	
 	@Autowired
-	private IBoardDAO dao;
+	private IBoardMapper mapper;
 	
 	@Override
 	public void insertArticle(BoardVO vo) {
-		dao.insertArticle(vo);
+		mapper.insertArticle(vo);
 	}
 
 	@Override
 	public List<BoardVO> getArticles() {
-		return dao.getArticles();
+		return mapper.getArticles();
 	}
 
 	@Override
 	public BoardVO getArticle(int bno) {
-		return null;
+		return mapper.getArticle(bno);
 	}
 
 	@Override
 	public void deleteArticle(int bno) {
-		// TODO Auto-generated method stub
-
+		mapper.deleteArticle(bno);
 	}
 
 	@Override
 	public void updateArticle(BoardVO vo) {
-		// TODO Auto-generated method stub
-
+		mapper.updateArticle(vo);
 	}
 
 }

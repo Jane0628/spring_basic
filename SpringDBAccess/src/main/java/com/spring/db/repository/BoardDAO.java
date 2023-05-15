@@ -14,15 +14,15 @@ import com.spring.db.model.BoardVO;
 @Repository
 public class BoardDAO implements IBoardDAO {
 	
+	// 내부 클래스 선언
 	class BoardMapper implements RowMapper<BoardVO> {
 		@Override
 		public BoardVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			BoardVO vo = new BoardVO(rs.getInt("board_no"),
-									 rs.getString("writer"),
-									 rs.getString("title"),
-									 rs.getString("content"),
-									 rs.getTimestamp("reg_date").toLocalDateTime());
-			return vo;
+			return new BoardVO(rs.getInt("board_no"),
+							   rs.getString("writer"),
+							   rs.getString("title"),
+							   rs.getString("content"),
+		 					   rs.getTimestamp("reg_date").toLocalDateTime());
 		}
 	}
 
@@ -39,32 +39,28 @@ public class BoardDAO implements IBoardDAO {
 
 	@Override
 	public List<BoardVO> getArticles() {
-		String sql = "SELECT * FROM jdbc_board";
-		
-		try {
-			return template.query(sql, new BoardMapper());
-		} catch (Exception e) {
-			return null;
-		}
-		
+		String sql = "SELECT * FROM jdbc_board ORDER BY board_no DESC";		
+		return template.query(sql, new BoardMapper());
 	}
 
 	@Override
 	public BoardVO getArticle(int bno) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM jdbc_board WHERE board_no = ?";		
+		return template.queryForObject(sql, new BoardMapper(), bno);
 	}
 
 	@Override
 	public void deleteArticle(int bno) {
-		// TODO Auto-generated method stub
-
+		String sql = "DELETE FROM jdbc_board WHERE board_no = ?";
+		template.update(sql, bno);
 	}
 
 	@Override
 	public void updateArticle(BoardVO vo) {
-		// TODO Auto-generated method stub
-
+		String sql = "UPDATE jdbc_board "
+				   + "SET writer = ?, title = ?, content = ? "
+				   + "WHERE board_no = ?";
+		template.update(sql, vo.getWriter(), vo.getTitle(), vo.getContent(), vo.getBoardNo());
 	}
 
 }
