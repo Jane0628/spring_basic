@@ -10,19 +10,19 @@
 		VALUES(#{title}, #{writer}, #{content})
 	</insert>
 	
-	<select id="getList">
+	<select id="getList" resultType="board">
 		SELECT * FROM freeboard
 		ORDER BY bno DESC
 	</select>
 	
-	<select id="getContent">
+	<select id="getContent" resultType="board">
 		SELECT * FROM freeboard
 		WHERE bno = #{bno}
 	</select>
 	
 	<update id="update">
 		UPDATE freeboard
-		SET title = #{title}, writer = #{writer}, content = #{content}
+		SET title = #{title}, content = #{content}, update_date = current_timestamp
 		WHERE bno = #{bno}
 	</update>
 	

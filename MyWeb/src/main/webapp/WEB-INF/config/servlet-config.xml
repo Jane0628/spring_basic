@@ -15,7 +15,10 @@
 		jsp 파일 같은 데서 경로 긴 거 일일이 쓰기 귀찮을 때 선언합니다.
 		내부 경로를 숨겨주는 역할도 합니다.
 	 -->
-	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/css/**" location="/resources/css/" />
+	<resources mapping="/fonts/**" location="/resources/fonts/" />
+	<resources mapping="/img/**" location="/resources/img/" />
+	<resources mapping="/js/**" location="/resources/js/" />
 
 	<!-- 
 		컨트롤러가 리턴한 문자열 앞, 뒤에 적절한 경로를 붙여서 화면을 응답할 수 있도록 도와주는 뷰 리졸버
