@@ -43,7 +43,7 @@
 						<c:forEach var="vo" items="${boardList}">
 							<tr>
 								<td>${vo.bno}</td>
-								<td><a href="${pageContext.request.contextPath}/freeBoard/content?bno=${vo.bno}">${vo.title}</a></td>
+								<td><a href="${pageContext.request.contextPath}/freeBoard/content/${vo.bno}">${vo.title}</a></td>
 								<td>${vo.writer}</td>
 								<td>
 									<fmt:parseDate value="${vo.regDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />

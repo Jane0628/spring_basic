@@ -13,7 +13,7 @@
 					<p>상세보기</p>
 				</div>
 
-				<form action="${pageContext.request.contextPath}/freeBoard/freeModify">
+				<form action="${pageContext.request.contextPath}/freeBoard/freeModify" method="post">
 					<div>
 						<label>DATE</label>
 						<c:choose>
