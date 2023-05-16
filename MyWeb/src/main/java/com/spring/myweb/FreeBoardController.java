@@ -44,14 +44,14 @@ public class FreeBoardController {
 	}
 	
 	// 글 수정 화면
-	@GetMapping("/freeModify")
+	@PostMapping("/freeModify")
 	public void modify(@ModelAttribute("article") FreeBoardVO vo) {}
 	
 	// 글 수정 처리
-	@PostMapping("/freeModify")
+	@PostMapping("/modify")
 	public String update(FreeBoardVO vo) {
 		service.update(vo);
-		return "redirect:/freeBoard/content?bno=" + vo.getBno();
+		return "redirect:/freeBoard/content/" + vo.getBno();
 	}
 	
 	// 글 삭제 처리

@@ -48,10 +48,10 @@
 						<textarea class="form-control" rows="10" name='content' readonly>${content.content}</textarea>
 					</div>
 
-					<button type="button" class="btn btn-primary"
+					<button type="submit" class="btn btn-primary"
 						onclick="return confirm('변경 페이지로 이동합니다.')">변경</button>
 					<button type="button" class="btn btn-dark"
-						onclick="location.href='${pageContext.request.contextPath}/freeboard/freeList'">목록</button>
+						onclick="location.href='${pageContext.request.contextPath}/freeBoard/freeList'">목록</button>
 				</form>
 			</div>
 		</div>

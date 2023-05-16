@@ -10,7 +10,7 @@
                             <p>수정하기</p>
                         </div>
 
-                        <form method="post" name="updateForm">
+                        <form action="${pageContext.request.contextPath}/freeBoard/modify" method="post" name="updateForm">
                             <div class="form-group">
                                 <label>번호</label>
                                 <input class="form-control" name='bno' value="${article.bno}">
