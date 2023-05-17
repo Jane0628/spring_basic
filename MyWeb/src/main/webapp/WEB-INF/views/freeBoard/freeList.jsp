@@ -15,15 +15,15 @@
 								<hr>
 
 								<!--form select를 가져온다 -->
-								<form>
+								<form action="<c:url value='/freeBoard/freeList'/>">
 									<div class="search-wrap">
-										<button type="button" class="btn btn-info search-btn">검색</button>
-										<input type="text" class="form-control search-input"> <select
-											class="form-control search-select">
-											<option>제목</option>
-											<option>내용</option>
-											<option>작성자</option>
-											<option>제목+내용</option>
+										<button type="submit" class="btn btn-info search-btn">검색</button>
+										<input type="text" name="keyword" class="form-control search-input" value="${pc.paging.keyword}">
+										<select name="condition" class="form-control search-select">
+											<option value="title" ${pc.paging.condition == 'title' ? 'selected' : ''}>제목</option>
+											<option value="content" ${pc.paging.condition == 'content' ? 'selected' : ''}>내용</option>
+											<option value="writer" ${pc.paging.condition == 'writer' ? 'selected' : ''}>작성자</option>
+											<option value="titleContent" ${pc.paging.condition == 'titleContent' ? 'selected' : ''}>제목+내용</option>
 										</select>
 									</div>
 								</form>
@@ -43,7 +43,7 @@
 											<tr>
 												<td>${vo.bno}</td>
 												<td><a
-														href="${pageContext.request.contextPath}/freeBoard/content/${vo.bno}">${vo.title}</a>
+														href="${pageContext.request.contextPath}/freeBoard/content/${vo.bno}?pageNum=${pc.paging.pageNum}&cpp=${pc.paging.cpp}&keyword=${pc.paging.keyword}&condition=${pc.paging.condition}">${vo.title}</a>
 												</td>
 												<td>${vo.writer}</td>
 												<td>
@@ -88,6 +88,12 @@
 										<button type="button" class="btn btn-info"
 											onclick="location.href='${pageContext.request.contextPath}/freeBoard/freeRegister'">글쓰기</button>
 									</div>
+
+									<input type="hidden" name="pageNum" value="${pc.paging.pageNum}">
+									<input type="hidden" name="cpp" value="${pc.paging.cpp}">
+									<input type="hidden" name="keyword" value="${pc.paging.keyword}">
+									<input type="hidden" name="condition" value="${pc.paging.condition}">
+
 								</form>
 
 							</div>
@@ -105,8 +111,17 @@
 							// 사용자가 페이지 관련 버튼을 클릭했을 때, 기존에는 각각의 a태그의 href에 각각 다른 url을 일일이 작성해서 보내줬다면,
 							// 이번에는 클릭한 그 버튼이 무엇인지를 확인해서 그 버튼에 맞는 페이지 정보를 자바스크립트로 끌고 와서 요청을 보내주겠습니다.
 
-							document.getElementById('pagination').addEventListener(e => {
+							document.getElementById('pagination').addEventListener('click', e => {
 								if (!e.target.matches('a')) return;
+
+								e.preventDefault(); // a 태그의 고유 기능 중지.
+
+								// 현재 이벤트가 발생한 요소(버튼)의 data-pagenum의 값을 얻어서 변수에 저장.
+								const value = e.target.dataset.pagenum;
+
+								// 페이지 버튼들을 감싸고 있는 form 태그를 지목해서 그 안에 숨겨져있는 pageNum이라는 input태그의 value에 위에서 얻은 data-pagenum의 값을 삽입한 후 submit
+								document.pageForm.pageNum.value = value;
+								document.pageForm.submit();
 							});
 
 						}
