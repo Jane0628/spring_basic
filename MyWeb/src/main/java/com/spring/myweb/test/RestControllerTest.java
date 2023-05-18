@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import lombok.extern.slf4j.Slf4j;
+
 //@Controller
-@RestController
+@RestController @Slf4j
 @RequestMapping("/rest")
 public class RestControllerTest {
 
@@ -57,9 +60,25 @@ public class RestControllerTest {
 	
 	//////////////////////////////////////////////////////////////////////
 	
-	@GetMapping("/getObject")
-	public Person getObject() {
+	@GetMapping("/view")
+	public ModelAndView viewPage() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("test/test1");
+		return mv;
+	}
+	
+	/*
+	 	@RequestBody
+	 	- 클라이언트 쪽에서 전송하는 JSON 데이터를 서버에서 사용하는 자바 언어에 맞게 변환하여 받을 수 있게 해주는 아노테이션.
+	 */
+	@PostMapping("/getObject")
+	public Person getObject(@RequestBody Person p) {
+		log.info(p.toString());
 		
+		p.setName("변경이름");
+		p.setAge(100);
+		
+		return p;
 	}
 	
 }
