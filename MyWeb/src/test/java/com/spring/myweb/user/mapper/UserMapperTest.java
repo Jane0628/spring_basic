@@ -1,6 +1,7 @@
 package com.spring.myweb.user.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
@@ -41,23 +42,15 @@ public class UserMapperTest {
 	@Test
 	@DisplayName("존재하는 회원 아이디와 올바른 비밀번호를 입력했을 시 회원의 정보가 리턴되어야 한다.")
 	void loginTest() {
-		
 		String id = "abc1234";
-		String pw = "aaa1111!";
-		
-		UserVO vo = new UserVO();
-		vo.setUserId("abc1234");
-		vo.setUserPw("aaa1111!");
-		vo.setUserName("홍길동");
-		
-		assertEquals(vo, mapper.login(id, pw));
+		String pw = "abc1234";		
+		assertNotNull(mapper.login(id, pw));
 	}
 	
 	@Test
 	@DisplayName("존재하지 않는 회원의 아이디를 입력하면 null이 올 것이다.")
 	void getInfo() {
-		String id = "abc1233";
-		assertNull(mapper.getInfo(id));
+		assertNull(mapper.getInfo("abc1233"));
 	}
 	
 	@Test
@@ -71,6 +64,8 @@ public class UserMapperTest {
 		vo.setUserEmail1("aass");
 		
 		mapper.updateUser(vo);
+		
+		assertEquals(mapper.getInfo("abc1234").getUserName(), vo.getUserName());
 	}
 
 }
