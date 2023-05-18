@@ -14,13 +14,12 @@ public class UserService implements IUserService {
 
 	@Override
 	public void join(UserVO vo) {
-
+		mapper.join(vo);
 	}
 
 	@Override
 	public int idCheck(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return mapper.idCheck(id);
 	}
 
 	@Override
