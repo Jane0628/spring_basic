@@ -16,7 +16,7 @@
 							<input type="text" class="form-control" id="userId"
 								placeholder="아이디를 (영문포함 4~12자)">
 							<div class="input-group-addon">
-								<button type="button" class="btn btn-primary" id="idCheckBtn">아이디중복체크</button>
+								<button type="button" class="btn btn-primary" id="idCheckBtn" onclick="location.href='${pageContext.request.contextPath}/user/idCheck'">아이디중복체크</button>
 							</div>
 						</div>
 						<span id="msgId"></span>
