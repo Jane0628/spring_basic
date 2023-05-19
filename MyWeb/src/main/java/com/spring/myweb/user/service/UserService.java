@@ -24,20 +24,17 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserVO login(String id, String pw) {
-		// TODO Auto-generated method stub
-		return null;
+		return mapper.login(id, pw);
 	}
 
 	@Override
 	public UserVO getInfo(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return mapper.getInfo(id);
 	}
 
 	@Override
 	public void updateUser(UserVO vo) {
-		// TODO Auto-generated method stub
-
+		mapper.updateUser(vo);
 	}
 
 }
