@@ -67,8 +67,8 @@
 								</div>
 							</div>
 							<div class="mail-check-box">
-								<input type="text" class="form-control mail-check-input" placeholder="인증번호 6자리를 입력하세요."
-									maxlength="6" disabled="disabled">
+								<input type="text" id="email-verification" class="form-control mail-check-input"
+									placeholder="인증번호 6자리를 입력하세요." maxlength="6" disabled="disabled">
 								<span id="mail-check-warn"></span>
 							</div>
 
@@ -107,6 +107,8 @@
 		<%@ include file="../include/footer.jsp" %>
 
 			<script>
+
+				let code = ''; // 이메일 전송 인증번호 저장을 위한 변수
 
 				// 아이디 중복 체크
 				document.getElementById('idCheckBtn').onclick = () => {
@@ -199,7 +201,7 @@
 								document.getElementById('userId').setAttribute('readonly', true);
 
 								// 더 이상 버튼을 누를 수 없도록 버튼 비활성화.
-								document.getElementById('idCheckBtn').setAttribute('disabled', true);
+								document.getElementById('idCheckBtn').disabled = true;
 
 								// 메시지 남기기
 								document.getElementById("msgId").textContent = "사용 가능한 아이디입니다! :)";
@@ -214,10 +216,57 @@
 
 				// 인증번호 이메일 전송
 				document.getElementById('mail-check-btn').onclick = () => {
+					if (document.getElementById('userEmail1').value === '') {
+						alert('이메일 주소를 입력 후 진행해주세요! :(');
+						document.getElementById("userEmail1").style.borderColor = "red"; s
+						return;
+					}
+
 					const email = document.getElementById('userEmail1').value + document.getElementById('userEmail2').value;
 					console.log(email);
-					fetch('${pageContext.request.contextPath}/user/mailCheck?email=' + email);
-				}
+					fetch('${pageContext.request.contextPath}/user/mailCheck?email=' + email)
+						.then(res => res.text())
+						.then(data => {
+							console.log('인증번호 : ' + data);
+
+							// 비활성된 인증번호 입력창 활성화
+							document.getElementById('email-verification').disabled = false;
+							code = data; // 인증번호를 전역변수에 저장.
+							alert('인증번호가 전송되었습니다. 이메일 확인 후 입력란에 정확히 입력해주세요. :)')
+						}); // 비동기 끝.
+
+				} // 인증번호 이벤트 끝.
+
+				// 인증번호 검증
+				// blur -> focus가 벗어나는 경우 발생.
+				document.getElementById('email-verification').onblur = (e => {
+					// console.log('blur 이벤트 발생 확인!');
+					const inputCode = e.target.value; // 사용자가 입력한 인증번호.
+					const $resultMsg = document.getElementById('mail-check-warn'); // span
+					console.log('사용자가 입력한 값 : ' + inputCode);
+
+					if (inputCode === code) {
+						$resultMsg.textContent = '인증번호가 일치합니다. :)';
+						$resultMsg.style.color = 'green';
+
+						// 이메일 인증을 더 이상 못하게 버튼 비활성화
+						document.getElementById('mail-check-btn').disabled = true;
+						document.getElementById('userEmail1').setAttribute('readonly', true);
+						document.getElementById('userEmail2').setAttribute('readonly', true);
+						e.target.style.display = 'none'; // 인증번호 입력란 숨기기
+
+						// 초기값을 사용자가 선택한 값으로 무조건 설정하는 방법 (select에서 readonly 대용)
+						// 항상 2개 같이 쓰셔야 해요.
+						const email2 = document.getElementById('userEmail2');
+
+						email2.setAttribute('onFocus', 'this.initialSelect = this.selectedIndex');
+						email2.setAttribute('onChange', 'this.selectedIndex = this.initialSelect');
+					} else {
+						$resultMsg.textContent = '인증번호를 다시 확인해주세요. :(';
+						$resultMsg.style.color = 'red';
+						e.target.focus(); // 다시 입력할 수 있도록 포커싱 주기
+					}
+				});
 
 				/*아이디 형식 검사 스크립트*/
 				var id = document.getElementById("userId");

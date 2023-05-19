@@ -33,12 +33,12 @@ public class MailSenderService {
 	public String joinEmail(String email) {
 		authNum = makeRandomNumber();
 
-		String setFrom = "ribbon7675@naver.com"; 						// email-config에 설정한 발신용 이메일 주소 입력.
-		String toMail = email;					 // 수신받을 이메일(가입하고자 하는 사람의 이메일)
-		String title = "회원 가입 인증 이메일입니다."; // 이메일 제목
+		String setFrom = "ribbon0628@gmail.com"; 						// email-config에 설정한 발신용 이메일 주소 입력.
+		String toMail = email;					 						// 수신받을 이메일(가입하고자 하는 사람의 이메일)
+		String title = "회원 가입 인증 이메일입니다."; 					// 이메일 제목
 		String content = "홈페이지를 방문해 주셔서 감사합니다. <br><br>" + 
-				"인증 번호는 <strong>" + authNum + "</strong> 입니다. <br>" +
-				"해당 인증 번호를 인증번호 확인란에 기입해 주세요."; //이메일에 삽입할 내용.
+						 "인증 번호는 <strong>" + authNum + "</strong> 입니다. <br>" +
+						 "해당 인증 번호를 인증번호 확인란에 기입해 주세요."; //이메일에 삽입할 내용.
 
 		mailSend(setFrom, toMail, title, content);
 
@@ -66,7 +66,6 @@ public class MailSenderService {
 			mailSender.send(msg);
 			
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
