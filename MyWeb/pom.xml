@@ -206,6 +206,12 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
+		<!-- spring-security-web : 보안 설정을 도와주는 라이브러리 (비밀번호 암호화) -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		    <version>5.3.13.RELEASE</version>
+		</dependency>
 
 	</dependencies>
 

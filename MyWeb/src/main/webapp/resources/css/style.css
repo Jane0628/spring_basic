@@ -116,7 +116,7 @@ header .container {
 
 /*부트스트랩의 드롭다운시 a태그 색상변경  */
 .dropdown-menu>li>a {
-	color: #555;
+	color: #a19f9f;
 }
 
 /*======슬라이더=======*/
@@ -235,9 +235,9 @@ section {
 
 .join-form {
 	margin: 0 auto;
-	/*가운데 정렬방법 하지만 적용되지 않는다. 이유는 col클래스들이 float:left를 들고 있기 때문*/
+	/*가운대 정렬방법 하지만 적용되지 않는다. 이유는 col클래스들이 float:left를 들고 있기 때문*/
 	float: none;
-	/*플롯을 해제한다. 가운데 정렬이 들어간다*/
+	/*플롯을 해제한다. 가운대정렬이 들어간다*/
 }
 
 /*조인폼클래스의 form태그의 접근 */

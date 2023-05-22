@@ -23,20 +23,18 @@
 							</div>
 							<div class="form-group">
 								<!--기본 폼그룹을 가져온다-->
-								<label for="password">비밀번호</label> <input type="password" class="form-control"
-									id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요. (영 대/소문자, 숫자 조합 8~16자)"> <span
-									id="msgPw"></span>
+								<label for="password">비밀번호</label> <input type="password" class="form-control" id="userPw" name="userPw"
+									placeholder="비밀번호를 입력해주세요. (영 대/소문자, 숫자 조합 8~16자)"> <span id="msgPw"></span>
 								<!--자바스크립트에서 추가-->
 							</div>
 							<div class="form-group">
-								<label for="password-confirm">비밀번호 확인</label> <input type="password"
-									class="form-control" id="pwConfirm" placeholder="비밀번호를 확인해주세요."> <span
-									id="msgPw-c"></span>
+								<label for="password-confirm">비밀번호 확인</label> <input type="password" class="form-control" id="pwConfirm"
+									placeholder="비밀번호를 확인해주세요."> <span id="msgPw-c"></span>
 								<!--자바스크립트에서 추가-->
 							</div>
 							<div class="form-group">
-								<label for="name">이름</label> <input type="text" class="form-control" id="userName"
-									name="userName" placeholder="이름을 입력하세요.">
+								<label for="name">이름</label> <input type="text" class="form-control" id="userName" name="userName"
+									placeholder="이름을 입력하세요.">
 							</div>
 							<!--input2탭의 input-addon을 가져온다 -->
 							<div class="form-group">
@@ -47,16 +45,15 @@
 										<option>011</option>
 										<option>017</option>
 										<option>018</option>
-									</select> <input type="text" class="form-control phone2" id="userPhone2"
-										name="userPhone2" placeholder="휴대폰번호를 입력하세요.">
+									</select> <input type="text" class="form-control phone2" id="userPhone2" name="userPhone2"
+										placeholder="휴대폰번호를 입력하세요.">
 								</div>
 							</div>
 							<div class="form-group email-form">
 								<label for="email">이메일</label><br>
 								<div class="input-group">
-									<input type="text" class="form-control" id="userEmail1" name="userEmail1"
-										placeholder="이메일"> <select class="form-control" id="userEmail2"
-										name="userEmail2">
+									<input type="text" class="form-control" id="userEmail1" name="userEmail1" placeholder="이메일"> <select
+										class="form-control" id="userEmail2" name="userEmail2">
 										<option>@naver.com</option>
 										<option>@daum.net</option>
 										<option>@gmail.com</option>
@@ -80,27 +77,22 @@
 							<div class="form-group">
 								<label for="addr-num">주소</label>
 								<div class="input-group">
-									<input type="text" class="form-control" id="addrZipNum" name="addrZipNum"
-										placeholder="우편번호" readonly>
+									<input type="text" class="form-control" id="addrZipNum" name="addrZipNum" placeholder="우편번호" readonly>
 									<div class="input-group-addon">
-										<button type="button" class="btn btn-primary"
-											onclick="searchAddress()">주소찾기</button>
+										<button type="button" class="btn btn-primary" onclick="searchAddress()">주소찾기</button>
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<input type="text" class="form-control" id="addrBasic" name="addrBasic"
-									placeholder="기본주소">
+								<input type="text" class="form-control" id="addrBasic" name="addrBasic" placeholder="기본주소">
 							</div>
 							<div class="form-group">
-								<input type="text" class="form-control" id="addrDetail" name="addrDetail"
-									placeholder="상세주소">
+								<input type="text" class="form-control" id="addrDetail" name="addrDetail" placeholder="상세주소">
 							</div>
 
 							<!--button탭에 들어가서 버튼종류를 확인한다-->
 							<div class="form-group">
-								<button type="button" id="joinBtn"
-									class="btn btn-lg btn-success btn-block">회원가입</button>
+								<button type="button" id="joinBtn" class="btn btn-lg btn-success btn-block">회원가입</button>
 							</div>
 
 							<div class="form-group">
@@ -160,7 +152,7 @@
 						# fetch API : 자바스크립트에서 제공하는 비동기 통신 함수.
 						- Promise 객체를 자동으로 리턴하여 손쉽게 통신의 응답 데이터를 소비할 수 있게 해줍니다. (Promise : 비동기 통신의 순서를 보장하는 문법)
 						- fetch 함수가 리턴하는 Promise 객체는 단순한 응답 JSON 데이터뿐만 아니라 전체적이고 포괄적인 응답 정보를 가지고 있습니다.
-						  따라서, 서버가 응답한 여러 정보 중 JSON 데이터만 소비하려면 json()이라는 메서드를 사용합니다. (문자열은 text())
+							따라서, 서버가 응답한 여러 정보 중 JSON 데이터만 소비하려면 json()이라는 메서드를 사용합니다. (문자열은 text())
 					*/
 
 					/*

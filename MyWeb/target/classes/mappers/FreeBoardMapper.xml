@@ -25,6 +25,12 @@
 	 		OR content LIKE CONCAT('%', #{keyword}, '%')
 	 	</if>
 	 </sql>
+	 
+	 <sql id="myPage">
+	 	<if test="loginId != null">
+	 		WHERE writer = #{loginId}
+	 	</if>
+	 </sql>
 
 	<insert id="register">
 		INSERT INTO freeboard
@@ -42,6 +48,7 @@
 	<select id="getTotal" resultType="int">
 		SELECT COUNT(*) FROM freeboard
 		<include refid="search"/>
+		<include refid="myPage"/>
 	</select>
 	
 	<select id="getContent" resultType="board">
