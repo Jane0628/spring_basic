@@ -11,7 +11,7 @@ public interface IReplyService {
 	void replyRegister(ReplyVO vo);
 
 	// 목록 요청
-	List<ReplyVO> getList(Map<String, Object> data);
+	List<ReplyVO> getList(int bno, int pageNum);
 
 	// 댓글 개수 (페이징, PageCreator는 사용하지 않습니다. (버튼을 사용하지 않기 때문))
 	int getTotal(int bno);
