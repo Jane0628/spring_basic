@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.myweb.command.ReplyVO;
 import com.spring.myweb.reply.service.IReplyService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/reply")
 public class ReplyController {
@@ -68,6 +66,19 @@ public class ReplyController {
 			return "Fail";
 		}
 		
+	}
+	
+	// 삭제 요청
+	@DeleteMapping("/{rno}")
+	public String delete(@PathVariable int rno, @RequestBody ReplyVO vo) {
+		vo.setRno(rno);
+		
+		if(service.pwCheck(vo)) {
+			service.delete(rno);
+			return "Success";
+		} else {
+			return "Fail";
+		}
 	}
 	
 }

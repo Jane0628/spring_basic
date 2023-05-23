@@ -345,6 +345,53 @@
 											getList(1, true);
 										}
 									});
+							}// end update event
+
+							// 삭제 이벤트
+							document.getElementById('modalDelBtn').onclick = () => {
+								/*
+									1. 모달창에 rno값, replyPw값을 얻습니다.
+									2. fetch 함수를 이용해서 DELETE 방식으로 reply/{rno} 요청
+									3. 서버에서는 요청을 받아서 비밀번호를 확인하고, 비밀번호가 맞으면 삭제를 진행하시면 됩니다.
+									4. 만약 비밀번호가 틀렸다면, 문자열을 반환해서 '비밀번호가 틀렸습니다.' 경고창을 띄우세요.
+									5. 삭제 완료되면 모달 닫고 목록 요청 다시 보내세요. (reset의 여부를 잘 판단해보세요. :))
+								*/
+								const rno = document.getElementById('modalRno').value;
+								const replyPw = document.getElementById('modalPw');
+								replyPw.style.borderColor = 'black';
+
+								if (replyPw.value === '') {
+									alert('본인 확인을 위해 비밀번호를 꼭 입력해주세요! :(');
+									replyPw.style.borderColor = 'red';
+									replyPw.focus();
+									return;
+								}
+
+								const reqobj = {
+									method: 'DELETE',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: JSON.stringify({
+										'replyPw': replyPw.value
+									})
+								}
+
+								fetch('${pageContext.request.contextPath}/reply/' + rno, reqobj)
+									.then(res => res.text())
+									.then(data => {
+										if (data === 'Fail') {
+											alert('비밀번호를 확인해주세요! :(');
+											replyPw.style.borderColor = 'red';
+											replyPw.textContent = '';
+											replyPw.focus();
+										} else {
+											alert('삭제가 완료되었습니다. :)');
+											$('#replyModal').modal('hide');
+											getList(1, true);
+										}
+									});
+
 							}
 						} // window.onload
 					</script>
