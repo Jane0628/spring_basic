@@ -212,6 +212,14 @@
 		    <artifactId>spring-security-web</artifactId>
 		    <version>5.3.13.RELEASE</version>
 		</dependency>
+		
+		<!-- jackson-datatype-jsr310 : JSON 파일이 LocalDateTime 객체를 표현할 수 있게 해주는 라이브러리 -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.datatype</groupId>
+		    <artifactId>jackson-datatype-jsr310</artifactId>
+		    <version>2.14.2</version>
+		</dependency>
+		
 
 	</dependencies>
 
