@@ -96,7 +96,7 @@
 									</div> -->
 								</div>
 
-								<button type="button" class="form-control" id="moreList">더보기</button>
+								<button type="button" class="form-control" id="moreList" style="display: none;">더보기</button>
 
 							</div>
 						</div>
@@ -199,7 +199,9 @@
 										const $replyList = document.getElementById('replyList');
 
 										// 응답 데이터의 길이가 0과 같거나 더 작으면 함수를 종료.
-										if (replyList.length <= 0) return;
+										if (replyList.length < 0) {
+											return;
+										};
 
 										// insert, update, delete 작업 후에는
 										// 댓글 내용 태그를 누적하고 있는 strAdd 변수를 초기화해서 마치 화면이 리셋된 것처럼 보여줘야 합니다.
