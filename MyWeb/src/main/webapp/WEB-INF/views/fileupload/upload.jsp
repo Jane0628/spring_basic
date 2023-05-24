@@ -16,6 +16,22 @@
 		파일 선택 : <input type="file" name="file"> <br>
 		<input type="submit" value="전송">
 	</form>
+	
+	<hr>
+	
+	<form action="${pageContext.request.contextPath}/fileupload/upload_ok2" method="post" enctype="multipart/form-data">
+		파일 선택 : <input type="file" multiple="multiple" name="files"> <br>
+		<input type="submit" value="전송">
+	</form>
+	
+	<hr>
+	
+	<form action="${pageContext.request.contextPath}/fileupload/upload_ok3" method="post" enctype="multipart/form-data">
+		파일 선택 : <input type="file" name="file"> <br>
+		파일 선택 : <input type="file" name="file"> <br>
+		파일 선택 : <input type="file" name="file"> <br>
+		<input type="submit" value="전송">
+	</form>
 
 </body>
 </html>
