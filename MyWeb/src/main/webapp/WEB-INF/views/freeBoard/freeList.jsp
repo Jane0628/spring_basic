@@ -20,10 +20,11 @@
 										<button type="submit" class="btn btn-info search-btn">검색</button>
 										<input type="text" name="keyword" class="form-control search-input" value="${pc.paging.keyword}">
 										<select name="condition" class="form-control search-select">
-											<option value="title" ${pc.paging.condition == 'title' ? 'selected' : ''}>제목</option>
-											<option value="content" ${pc.paging.condition == 'content' ? 'selected' : ''}>내용</option>
-											<option value="writer" ${pc.paging.condition == 'writer' ? 'selected' : ''}>작성자</option>
-											<option value="titleContent" ${pc.paging.condition == 'titleContent' ? 'selected' : ''}>제목+내용</option>
+											<option value="title" ${pc.paging.condition=='title' ? 'selected' : '' }>제목</option>
+											<option value="content" ${pc.paging.condition=='content' ? 'selected' : '' }>내용</option>
+											<option value="writer" ${pc.paging.condition=='writer' ? 'selected' : '' }>작성자</option>
+											<option value="titleContent" ${pc.paging.condition=='titleContent' ? 'selected' : '' }>제목+내용
+											</option>
 										</select>
 									</div>
 								</form>
@@ -43,21 +44,19 @@
 											<tr>
 												<td>${vo.bno}</td>
 												<td><a
-														href="${pageContext.request.contextPath}/freeBoard/content/${vo.bno}?pageNum=${pc.paging.pageNum}&cpp=${pc.paging.cpp}&keyword=${pc.paging.keyword}&condition=${pc.paging.condition}">${vo.title}</a>
+														href="${pageContext.request.contextPath}/freeBoard/content/${vo.bno}?pageNum=${pc.paging.pageNum}&cpp=${pc.paging.cpp}&keyword=${pc.paging.keyword}&condition=${pc.paging.condition}">${vo.title}&nbsp;</a>
+													<strong style="color: red">[${vo.replyCnt}]</strong>
 												</td>
 												<td>${vo.writer}</td>
 												<td>
-													<fmt:parseDate value="${vo.regDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"
-														var="parsedDate" type="both" />
-													<fmt:formatDate value="${parsedDate}"
-														pattern="yyyy년 MM월 dd일 HH시 mm분" />
+													<fmt:parseDate value="${vo.regDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate"
+														type="both" />
+													<fmt:formatDate value="${parsedDate}" pattern="yyyy년 MM월 dd일 HH시 mm분" />
 												</td>
 												<td>
-													<fmt:parseDate value="${vo.updateDate}"
-														pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedUpdatetime"
+													<fmt:parseDate value="${vo.updateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedUpdatetime"
 														type="both" />
-													<fmt:formatDate value="${parsedUpdatetime}"
-														pattern="yyyy년 MM월 dd일 HH시 mm분" />
+													<fmt:formatDate value="${parsedUpdatetime}" pattern="yyyy년 MM월 dd일 HH시 mm분" />
 												</td>
 											</tr>
 										</c:forEach>

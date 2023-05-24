@@ -191,17 +191,12 @@
 								fetch('${pageContext.request.contextPath}/reply/getList/' + bno + '/' + pageNum)
 									.then(res => res.json())
 									.then(data => {
-										// console.log(data);
+										console.log(data);
 
 										let total = data.total;			// 총 댓글 수
 										let replyList = data.list;	// 댓글 리스트
 										let position = 'beforeend';
 										const $replyList = document.getElementById('replyList');
-
-										// 응답 데이터의 길이가 0과 같거나 더 작으면 함수를 종료.
-										if (replyList.length < 0) {
-											return;
-										};
 
 										// insert, update, delete 작업 후에는
 										// 댓글 내용 태그를 누적하고 있는 strAdd 변수를 초기화해서 마치 화면이 리셋된 것처럼 보여줘야 합니다.
@@ -212,6 +207,11 @@
 											page = 1;
 											position = 'afterbegin'
 										}
+
+										// 응답 데이터의 길이가 0과 같거나 더 작으면 함수를 종료.
+										if (replyList.length <= 0) {
+											return;
+										};
 
 										// 페이지 번호 * 이번 요청으로 받은 댓글 수보다 전체 댓글 수가 작다면 더보기 버튼은 없어도 된다.
 										if (total <= page * 5) {
@@ -231,9 +231,9 @@
 													<div class='reply-content'>
 														<div class='reply-group'>
 															<strong class='left'>` + replyList[i].replyId + `</strong>
-															<small class='left'>` + replyList[i].replyDate + `</small>
-															<a href='` + replyList[i].rno + `' class='right replyDelete'><span class='glyphicon glyphicon-remove'></span>삭제</a>
-															<a href='` + replyList[i].rno + `' class='right replyModify'><span class='glyphicon glyphicon-pencil'></span>수정</a> &nbsp;
+															<small class='left'>` + (replyList[i].updateDate != null ? parseTime(replyList[i].updateDate) + ' (수정됨)' : parseTime(replyList[i].replyDate)) + `</small>
+															<a href='` + replyList[i].rno + `' class='right replyDelete'><span class='glyphicon glyphicon-remove'></span> 삭제</a>
+															<a href='` + replyList[i].rno + `' class='right replyModify'><span class='glyphicon glyphicon-pencil'></span> 수정&nbsp;&nbsp;</a>
 														</div>
 														<p class='clearfix'>` + replyList[i].reply + `</p>
 													</div>
@@ -285,12 +285,14 @@
 
 								// 3. 모달 창 하나를 이용해서 상황에 따라 수정/ 삭제 모달을 구분하기 위해 조건문을 작성.
 								// (모달 하나로 수정, 삭제를 같이 처리. 그러기 위해 디자인 조정.)
+								const modalReply = document.getElementById('modalReply');
 								if (e.target.classList.contains('replyModify')) {
-									document.getElementById('modalDelBtn').style.display = 'none';
 									// 수정 버튼을 눌렀으므로 수정 모달 형식을 꾸며주겠다.
-									document.querySelector('.modal-title').textContent = '댓글 수정';
-									document.getElementById('modalReply').style.display = 'inline'; // 댓글창
-									document.getElementById('modalReply').value = content;
+									document.querySelector('.modal-title').textContent = '수정할 댓글을 입력해주세요. :)';
+									modalReply.style.display = 'inline'; // 댓글창
+									modalReply.style.borderColor = 'black'; // 댓글창
+									modalReply.value = content;
+									document.getElementById('modalPw').style.borderColor = 'black';
 									document.getElementById('modalModBtn').style.display = 'inline';
 									document.getElementById('modalDelBtn').style.display = 'none';
 
@@ -298,8 +300,9 @@
 									$('#replyModal').modal('show');
 								} else {
 									// 삭제 버튼을 눌렀으므로 삭제 모달 형식으로 꾸며줌.
-									document.querySelector('.modal-title').textContent = '댓글 삭제';
-									document.getElementById('modalReply').style.display = 'none'; // 댓글창
+									document.querySelector('.modal-title').textContent = '정말로 삭제하시겠습니까? ;-;';
+									modalReply.setAttribute('readonly'); // 댓글창
+									document.getElementById('modalPw').style.borderColor = 'black';
 									document.getElementById('modalModBtn').style.display = 'none';
 									document.getElementById('modalDelBtn').style.display = 'inline';
 
@@ -309,12 +312,21 @@
 
 							// 수정 처리 함수. (수정 모달을 열어서 수정 내용을 작성 후 수정 버튼을 클릭했을 때)
 							document.getElementById('modalModBtn').onclick = () => {
-								const reply = document.getElementById('modalReply').value;
+								const reply = document.getElementById('modalReply');
 								const rno = document.getElementById('modalRno').value;
-								const replyPw = document.getElementById('modalPw').value;
+								const replyPw = document.getElementById('modalPw');
+								reply.style.borderColor = 'black';
+								replyPw.style.borderColor = 'black';
 
-								if (reply === '' || replyPw === '') {
-									alert('내용과 비밀번호는 필수 입력사항입니다! :(');
+								if (reply.value === '') {
+									alert('내용을 입력해주세요! :(');
+									reply.style.borderColor = 'red';
+									reply.focus();
+									return;
+								} else if (replyPw === '') {
+									alert('비밀번호를 입력해주세요! :(');
+									replyPw.style.borderColor = 'red';
+									replyPw.focus();
 									return;
 								}
 
@@ -325,8 +337,8 @@
 										'Content-Type': 'application/json'
 									},
 									body: JSON.stringify({
-										'reply': reply,
-										'replyPw': replyPw
+										'reply': reply.value,
+										'replyPw': replyPw.value
 									})
 								}
 
@@ -394,6 +406,38 @@
 										}
 									});
 
+							} // end delete event
+
+							// 댓글 날짜 변환 함수
+							function parseTime(regDateTime) {
+								let year, month, day, hour, minute, second;
+
+								if (regDateTime.length === 5) {
+									[year, month, day, hour, minute] = regDateTime;
+									second = 0;
+								} else {
+									[year, month, day, hour, minute, second] = regDateTime;
+								}
+
+								// 원하는 날짜로 객체를 생성
+								const regTime = new Date(year, month - 1, day, hour, minute, second);
+								const date = new Date();
+								const gap = date.getTime() - regTime.getTime();
+
+								let time;
+								if (gap < 60 * 60 * 24 * 1000) { // 하루
+									if (gap < 60 * 60 * 1000) { // 1시간
+										time = '방금 전';
+									} else {
+										time = parseInt(gap / (1000 * 60 * 60)) + '시간 전';
+									}
+								} else if (gap < 60 * 60 * 24 * 30 * 1000) { // 한 달
+									time = parseInt(gap / (1000 * 60 * 60 * 24)) + '일 전';
+								} else {
+									time = `${regTime.getFullYear()}년 ${regTime.getMonth()}월 ${regTime.getDate()}일`;
+								}
+
+								return time;
 							}
 						} // window.onload
 					</script>

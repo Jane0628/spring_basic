@@ -38,11 +38,13 @@
 		VALUES(#{title}, #{writer}, #{content})
 	</insert>
 	
-	<select id="getList" resultType="board">
-		SELECT * FROM freeboard
-		<include refid="search"/>
+	<select id="getList" resultType="board">		
+		SELECT b.*,
+			   (SELECT COUNT(*) FROM freereply WHERE bno = b.bno) AS reply_cnt
+		FROM freeboard b
+        <include refid="search"/>
 		ORDER BY bno DESC
-		LIMIT #{pageStart}, #{cpp}
+		LIMIT #{pageStart}, #{cpp};
 	</select>
 	
 	<select id="getTotal" resultType="int">

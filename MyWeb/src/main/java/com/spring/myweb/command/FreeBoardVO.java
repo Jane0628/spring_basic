@@ -25,10 +25,10 @@ import lombok.ToString;
 public class FreeBoardVO {
 	
 	private int bno;
-	private String title;
-	private String writer;
-	private String content;
-	private LocalDateTime regDate;
-	private LocalDateTime updateDate;
+	private String title, writer, content;
+	private LocalDateTime regDate, updateDate;
+	
+	// 게시글의 댓글 개수 표현을 위한 변수 선언
+	private int replyCnt;
 
 }
