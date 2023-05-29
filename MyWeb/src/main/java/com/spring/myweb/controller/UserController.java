@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.myweb.command.KakaoUserVO;
 import com.spring.myweb.command.UserVO;
 import com.spring.myweb.freeboard.service.IFreeBoardService;
 import com.spring.myweb.user.service.IUserService;
+import com.spring.myweb.util.KakaoService;
 import com.spring.myweb.util.MailSenderService;
 import com.spring.myweb.util.PageCreator;
 import com.spring.myweb.util.PageVO;
@@ -31,6 +33,8 @@ public class UserController {
 	private IFreeBoardService boardService;
 	@Autowired
 	private MailSenderService mailService;
+	@Autowired
+	private KakaoService kakaoService;
 	
 	// 회원가입 페이지로 이동
 	@GetMapping("/userJoin")
@@ -67,14 +71,36 @@ public class UserController {
 	
 	// 로그인 페이지로 이동 요청
 	@GetMapping("/userLogin")
-	public void userLogin() {}
+	public void userLogin(Model model, HttpSession session) {
+		// 카카오 URL을 만들어서 userLogin.jsp로 보내야 합니다.
+		String kakaoAuthUrl = kakaoService.getAuthorizationUrl(session);
+		log.info("카카오 로그인 url : {}", kakaoAuthUrl);
+		model.addAttribute("urlKakao", kakaoAuthUrl);
+	}
 	
 	// 로그인 요청
 	@PostMapping("/userLogin")
 	public void userLogin(String userId, String userPw, Model model) {
 		log.info("나는 UserController의 login이다!");
 		model.addAttribute("user", service.login(userId, userPw));
-	}	
+	}
+	
+	// 카카오 로그인 성공 시 callback
+	@GetMapping("/kakao_callback")
+	public void callbackKakao(String code, String state, HttpSession session, Model model) {
+		log.info("로그인 성공! callbackKakao 호출!");
+		log.info("인가 코드 : {}", code);
+		
+		String accessToken = kakaoService.getAccessToken(session, code, state);
+		log.info("access 토큰값 : {}", accessToken);
+		
+		// accessToken을 이용하여 로그인 사용자 정보를 읽어오자.
+		KakaoUserVO vo = kakaoService.getUserProfile(accessToken);
+		
+		// 여기까지가 카카오 로그인 api가 제공하는 기능의 끝입니다.
+		// 추가 입력 정보가 필요하다면 추가 입력할 수 있는 페이지로 보내셔서 입력을 더 받아서 데이터베이스에 집어넣으면 됩니다.
+		
+	}
 	
 	// 마이 페이지로 이동
 	@GetMapping("/userMypage")

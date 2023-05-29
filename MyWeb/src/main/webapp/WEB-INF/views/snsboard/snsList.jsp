@@ -191,7 +191,7 @@
 							<div class="aside-inner">
 								<div class="menu1">
 									<p>
-										<img src="${pageContext.request.contextPath}/img/profile.png">홍길동
+										<img src="${pageContext.request.contextPath}/img/profile.png"> ${login}
 									</p>
 									<ul>
 										<li>사이드메뉴1</li>
@@ -405,8 +405,9 @@
 												<img src="${pageContext.request.contextPath}/img/profile.png">
 											</div>
 											<div class="title">
-												<p>테스트</p>
-												<small>21시간</small>
+												<p>`+ vo.writer + `</p>
+												<small>`+ parseTime(vo.regDate) + `&nbsp;&nbsp;</small>
+												<a id="download" href="${pageContext.request.contextPath}/snsboard/download/` + vo.fileLoca + `/` + vo.fileName + `">이미지 다운로드</a>
 											</div>
 										</div>
 
@@ -417,7 +418,7 @@
 
 										<div class="image-inner">
 											<!-- 이미지영역 -->
-											<img src="${pageContext.request.contextPath}/snsboard/display/` + vo.fileLoca + `/` + vo.fileName + `">
+												<img data-bno="`+ vo.bno + `" src="${pageContext.request.contextPath}/snsboard/display/` + vo.fileLoca + `/` + vo.fileName + `">
 										</div>
 
 										<div class="like-inner">
@@ -428,8 +429,8 @@
 
 										<div class="link-inner">
 											<a href="##"><i class="glyphicon glyphicon-thumbs-up"></i>좋아요</a>
-											<a href="`+ vo.bno + `"><i class="glyphicon glyphicon-comment"></i>댓글달기</a>
-											<a href="`+ vo.bno + `"><i class="glyphicon glyphicon-remove"></i>삭제하기</a>
+											<a data-bno="`+ vo.bno + `" id="comment" href="` + vo.bno + `"><i class="glyphicon glyphicon-comment"></i>댓글달기</a>
+											<a id="delBtn" href="`+ vo.bno + `"><i class="glyphicon glyphicon-remove"></i>삭제하기</a>
 										</div>`;
 								}
 
@@ -441,6 +442,99 @@
 								$contentDiv.insertAdjacentHTML(position, str);
 							});
 					} // end getList()
+
+					// 상세보기 처리 (모달창 열어줄 겁니다.)
+					document.getElementById('contentDiv').addEventListener('click', e => {
+						e.preventDefault(); // a의 고유 기능 중지
+						console.log('target : ' + e.target);
+						if (!e.target.matches('.image-inner img') && !e.target.matches('.link-inner #comment') && !e.target.matches('.title-inner #download')) {
+							console.log('이벤트 대상 아님');
+							return;
+						}
+
+						if (e.target.matches('.title #download')) {
+							if (confirm('다운로드를 진행합니다.')) {
+								location.href = e.target.getAttribute('href');
+								return;
+							} else return;
+						}
+
+						// 글 번호 얻기
+						const bno = e.target.dataset.bno;
+						console.log('bno : ' + bno);
+
+						// fetch 함수를 사용하여 글 상세보기 요청을 비동기식으로 요청하세요.
+						// 전달받은 글 내용을 미리 준비한 모달창에 뿌릴 겁니다. (모달 위에 있어요.)
+						// 값을 제 위치에 배치하시고 모달을 열어주셍. (부트스트랩 모달이기 때문에 jQuery로 열어주세요.)
+						fetch('${pageContext.request.contextPath}/snsboard/content/' + bno)
+							.then(res => res.json())
+							.then(data => {
+								document.getElementById('snsImg').setAttribute('src', '${pageContext.request.contextPath}/snsboard/display/' + data.fileLoca + '/' + data.fileName);
+								document.getElementById('snsWriter').textContent = data.writer;
+								document.getElementById('snsRegdate').textContent = parseTime(data.regDate);
+								document.getElementById('snsContent').textContent = data.content;
+
+								$('#snsModal').modal('show');
+							});
+					});
+
+					// 날짜 변환 함수
+					function parseTime(regDateTime) {
+						let year, month, day, hour, minute, second;
+
+						if (regDateTime.length === 5) {
+							[year, month, day, hour, minute] = regDateTime;
+							second = 0;
+						} else {
+							[year, month, day, hour, minute, second] = regDateTime;
+						}
+
+						// 원하는 날짜로 객체를 생성
+						const regTime = new Date(year, month - 1, day, hour, minute, second);
+						const date = new Date();
+						const gap = date.getTime() - regTime.getTime();
+
+						let time;
+						if (gap < 60 * 60 * 24 * 1000) { // 하루
+							if (gap < 60 * 60 * 1000) { // 1시간
+								time = '방금 전';
+							} else {
+								time = parseInt(gap / (1000 * 60 * 60)) + '시간 전';
+							}
+						} else if (gap < 60 * 60 * 24 * 30 * 1000) { // 한 달
+							time = parseInt(gap / (1000 * 60 * 60 * 24)) + '일 전';
+						} else {
+							time = `${regTime.getFullYear()}년 ${regTime.getMonth()}월 ${regTime.getDate()}일`;
+						}
+
+						return time;
+					}
+
+					// 삭제 처리
+					// 삭제하기 링크를 클릭했을 때 이벤트를 발생시켜서 비동기 방식으로 삭제를 진행해 주세요. (삭제 버튼은 여러 개입니다!)
+					// 서버 쪽에서 권한을 확인해주세요. (작성자와 로그인 중인 사용자의 id를 비교해서 일치하는지의 여부)
+					// 일치하지 않는다면 문자열 "noAuth" 리턴, 삭제 완료하면 "success" 리턴
+					// url : /snsboard/글번호 method : DELETE
+					document.getElementById('contentDiv').addEventListener('click', e => {
+						console.log('deleteContent 들어옴!')
+						if (!e.target.matches('.link-inner #delBtn')) return;
+
+						fetch('${pageContext.request.contextPath}/snsboard/' + e.target.getAttribute('href'), {
+							method: 'DELETE'
+						})
+							.then(res => res.text())
+							.then(data => {
+								if (data === 'success') {
+									alert('삭제가 완료되었습니다.');
+								} else if (data === 'wrongId') {
+									alert('본인이 작성한 글만 삭제할 수 있습니다! :(');
+								} else {
+									alert('예상치 못한 오류로 삭제가 되지 않았습니다. 빠른 시일 내로 고치겠습니다.');
+								}
+								$('#snsModal').modal('hide');
+								getList(1, true);
+							})
+					});
 
 					/*
 						무한 스크롤 페이징
